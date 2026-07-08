@@ -1,5 +1,7 @@
 # SpatialFlow Agent
 
+[![CI](https://github.com/IIIIQIIII/spatialflow-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/IIIIQIIII/spatialflow-agent/actions/workflows/ci.yml)
+
 SpatialFlow Agent is a chat-style visual agent harness for room editing workflows. It turns a real run into a product-like conversation with:
 
 - room understanding and structure-preserving masks
@@ -10,6 +12,21 @@ SpatialFlow Agent is a chat-style visual agent harness for room editing workflow
 - human-in-the-loop revision
 
 The repo ships with a bundled sample run, so anyone can clone it and launch the full UI without needing a GPU box first.
+
+## Preview
+
+![SpatialFlow Agent preview](docs/media/spatialflow-agent-preview.png)
+
+The current public demo shows a full room-editing loop:
+
+- initial user prompt
+- structure-aware perception
+- depth and layout reasoning
+- first image edit pass
+- verifier score
+- review questions
+- human feedback revision
+- final improved render
 
 ## What is in this repo
 
@@ -29,6 +46,14 @@ Then open:
 
 - UI: `http://127.0.0.1:4009`
 - API: `http://127.0.0.1:4188/api/state`
+
+## Validation
+
+```bash
+npm run build
+```
+
+The repository also includes a GitHub Actions workflow that runs the build on every push and pull request.
 
 ## Default behavior
 
@@ -95,6 +120,8 @@ The generated files will be written to:
 ```text
 outputs/spatialflow-chat-demo/
 ```
+
+For a polished walkthrough clip, check the latest release assets.
 
 ## Notes
 
