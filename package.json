@@ -1,6 +1,6 @@
 {
   "name": "spatialflow-agent",
-  "version": "0.1.0",
+  "version": "0.2.1",
   "description": "Spatial visual agent harness for room understanding, image editing, verifier review, and human feedback.",
   "type": "module",
   "main": "server/index.js",
@@ -12,7 +12,9 @@
     "start": "npm run build && npm run server",
     "record": "node scripts/record-demo.js",
     "pipeline": "python3 scripts/run_full_pipeline.py",
-    "smoke": "python3 scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-local"
+    "smoke": "python3 scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-local",
+    "smoke:assert": "python3 scripts/assert_smoke_run.py outputs/spatialflow-smoke-local",
+    "smoke:check": "npm run smoke && npm run smoke:assert"
   },
   "license": "GPL-3.0",
   "dependencies": {

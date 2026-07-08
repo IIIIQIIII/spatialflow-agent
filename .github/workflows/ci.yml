@@ -35,3 +35,6 @@ jobs:
 
       - name: Smoke test full pipeline
         run: python scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-ci
+
+      - name: Assert smoke test outputs
+        run: python scripts/assert_smoke_run.py outputs/spatialflow-smoke-ci

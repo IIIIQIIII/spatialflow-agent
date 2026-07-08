@@ -1,0 +1,24 @@
+# Changelog
+
+All notable changes to this project will be documented here.
+
+## v0.2.1
+
+- added a one-command smoke validation flow with `npm run smoke:check`
+- added smoke artifact assertions to CI
+- added contributor-facing project files: contributing guide, security policy, code of conduct, issue templates, and PR template
+
+## v0.2.0
+
+- published the full SpatialFlow agent stack
+- added Python pipeline modules
+- added Codex-derived plugin and skill packaging
+- added end-to-end pipeline runner
+- kept bundled sample data and web UI demo flow
+
+## v0.1.0
+
+- initial public repository
+- chat-style web UI
+- bundled demo run
+- demo video release asset

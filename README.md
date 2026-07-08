@@ -27,6 +27,10 @@ In short: this is not only a frontend replay. It is the full Codex-derived Spati
 Architecture details:
 
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [SECURITY.md](SECURITY.md)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+- [CHANGELOG.md](CHANGELOG.md)
 
 ## What is in this repo
 
@@ -138,7 +142,7 @@ python3 scripts/run_full_pipeline.py --feedback "更空、更高级、减少植�
 ### 6. Run the no-GPU smoke test
 
 ```bash
-npm run smoke
+npm run smoke:check
 ```
 
 This path does not call heavy models. It materializes a complete run from bundled sample artifacts and still writes:
@@ -226,7 +230,7 @@ python3 -m py_compile scripts/run_full_pipeline.py tools/*.py
 Full smoke test:
 
 ```bash
-python3 scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-check
+npm run smoke:check
 ```
 
 GitHub Actions now runs:
@@ -234,6 +238,7 @@ GitHub Actions now runs:
 - web build
 - Python syntax check
 - full smoke test materialization
+- smoke output assertions
 
 ## Notes
 
