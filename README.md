@@ -14,6 +14,11 @@ SpatialFlow Agent is a Codex-derived visual agent project for room editing workf
 
 ![SpatialFlow Agent preview](docs/media/spatialflow-agent-preview.png)
 
+Validated B200 live demo package:
+
+- [spatialflow-b200-live-demo.zip](https://github.com/IIIIQIIII/spatialflow-agent/releases/download/v0.2.2/spatialflow-b200-live-demo.zip)
+- [v0.2.2 release page](https://github.com/IIIIQIIII/spatialflow-agent/releases/tag/v0.2.2)
+
 ## Project lineage
 
 This project is a second-stage productization effort built on top of an open-source Codex agent pattern.
@@ -232,7 +237,11 @@ The generated files are written to:
 outputs/spatialflow-chat-demo/
 ```
 
-For a polished walkthrough clip, see the latest release assets.
+For the validated NVIDIA B200 live-run package from a fresh GitHub clone, download:
+
+- [spatialflow-b200-live-demo.zip](https://github.com/IIIIQIIII/spatialflow-agent/releases/download/v0.2.2/spatialflow-b200-live-demo.zip)
+
+For other published assets, see the [latest release page](https://github.com/IIIIQIIII/spatialflow-agent/releases/tag/v0.2.2).
 
 ## Validation
 
