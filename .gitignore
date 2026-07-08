@@ -14,6 +14,7 @@ out/
 
 # Environment variables
 .env
+.env.openrouter
 .env.local
 .env.development.local
 .env.test.local
@@ -101,6 +102,8 @@ temp/
 # Local demo captures
 outputs/
 *.webm
+models/
+vendor/
 
 # Claude specific
 .claude/

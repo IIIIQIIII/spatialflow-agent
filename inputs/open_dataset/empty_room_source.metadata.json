@@ -1,0 +1,20 @@
+{
+  "dataset": "wunderkinds07/empty-room",
+  "split": "train",
+  "sample_index_scanned_choice": 11,
+  "score": 6,
+  "image_key": "Before_Image",
+  "keys": [
+    "ID",
+    "Before_Image",
+    "After_Image",
+    "Before_Prompt",
+    "After_Prompt"
+  ],
+  "text_fields": {
+    "ID": 59,
+    "Before_Prompt": "a large empty room with wood floors and windows",
+    "After_Prompt": "a living room with a large flat screen tv"
+  },
+  "local_image": "inputs/room-dataset.png"
+}

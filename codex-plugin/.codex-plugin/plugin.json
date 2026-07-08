@@ -1,0 +1,27 @@
+{
+  "name": "spatialflow-agent",
+  "version": "0.1.0",
+  "description": "SpatialFlow-specific spatial visual agent harness for an openai/codex fork.",
+  "keywords": [
+    "codex-derived",
+    "spatial-agent",
+    "virtual-staging",
+    "agentic-rl"
+  ],
+  "skills": "./skills",
+  "interface": {
+    "displayName": "SpatialFlow Agent",
+    "shortDescription": "Spatial visual agent harness for SpatialFlow room-design workflows.",
+    "longDescription": "Adds SpatialFlow-specific working rules, tool contracts, verifier criteria, and rollout artifacts to Codex so the fork behaves like a focused spatial visual agent product instead of a generic coding assistant.",
+    "developerName": "Ma Shijian",
+    "category": "AI Agent",
+    "capabilities": [
+      "room-state-representation",
+      "virtual-staging-action-planning",
+      "b200-tool-orchestration",
+      "verifier-trace-generation",
+      "agentic-rl-rollout-data"
+    ],
+    "defaultPrompt": "Use the SpatialFlow spatial-agent skill. Build room-design agent plans as observe -> represent state -> choose action -> execute tool -> verify -> record trace."
+  }
+}

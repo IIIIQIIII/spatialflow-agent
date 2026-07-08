@@ -103,7 +103,7 @@
     "status": "ok",
     "model": "jetjodh/sam3.1",
     "checkpoint": "<workspace>/models/sam3/sam3.1_multiplex.pt",
-    "codebase": "/home/ubuntu/projects/sam3",
+    "codebase": "<external_sam3_source>",
     "prompts": [
       "floor",
       "wall",

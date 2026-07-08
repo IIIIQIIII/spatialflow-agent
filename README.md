@@ -2,43 +2,118 @@
 
 [![CI](https://github.com/IIIIQIIII/spatialflow-agent/actions/workflows/ci.yml/badge.svg)](https://github.com/IIIIQIIII/spatialflow-agent/actions/workflows/ci.yml)
 
-SpatialFlow Agent is a chat-style visual agent harness for room editing workflows. It turns a real run into a product-like conversation with:
+SpatialFlow Agent is a Codex-derived visual agent project for room editing workflows. This repository now contains the full project surface, not just the web demo:
 
-- room understanding and structure-preserving masks
-- depth and layout reasoning
-- agent planning
-- image editing passes
-- verifier feedback
-- human-in-the-loop revision
-
-The repo ships with a bundled sample run, so anyone can clone it and launch the full UI without needing a GPU box first.
+- the core Python perception/planning/editing/verifier pipeline
+- the Codex-oriented plugin and skill layer
+- the chat-style web product UI
+- bundled sample inputs and sample run artifacts
+- a runnable end-to-end pipeline script that emits trace, bundle, and demo outputs
 
 ## Preview
 
 ![SpatialFlow Agent preview](docs/media/spatialflow-agent-preview.png)
 
-The current public demo shows a full room-editing loop:
+## Project lineage
 
-- initial user prompt
-- structure-aware perception
-- depth and layout reasoning
-- first image edit pass
-- verifier score
-- review questions
-- human feedback revision
-- final improved render
+This project is a second-stage productization effort built on top of an open-source Codex agent pattern.
+
+- The interaction model is Codex-style: long-horizon task execution with tool traces and artifact outputs.
+- The domain is specialized away from coding into spatial design and room-editing workflows.
+- The repository includes both the Codex-derived harness layer and the domain execution stack.
+
+In short: this is not only a frontend replay. It is the full Codex-derived SpatialFlow agent project.
 
 ## What is in this repo
 
-- `src/`: React chat-style product UI
-- `server/`: Express server that serves the UI and run artifacts
-- `demo-data/`: bundled sample room-editing run used by default
-- `scripts/record-demo.js`: browser recording script for generating a demo video
+- `tools/`: core Python modules for perception, geometry, planning, editing, verification, and HITL review
+- `configs/spatialflow-agent.json`: tool registry and agent contract
+- `codex-plugin/`: Codex-facing plugin/skill packaging for the agent
+- `scripts/run_full_pipeline.py`: end-to-end pipeline runner
+- `src/`, `server/`: chat-style product UI and artifact server
+- `demo-data/`: bundled sample run used by the web UI by default
+- `inputs/`: sample room image plus open dataset provenance metadata
+
+## Core pipeline
+
+The full pipeline is:
+
+1. `room_spatial_parser.py`
+2. `depth_layout_estimator.py`
+3. `layout_action_planner.py`
+4. `visual_edit_executor.py`
+5. `visual_verifier.py`
+6. `hitl_review.py`
+
+The runner script stitches these together and writes:
+
+- `trace.json`
+- `bundle.json`
+- `demo.html`
+- per-tool stdout/stderr logs
 
 ## Quick start
 
+### 1. Install JavaScript dependencies
+
 ```bash
 npm install
+```
+
+### 2. Install Python dependencies
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 3. Optional model/API setup
+
+Copy the OpenRouter template if you want image editing and GPT-based review:
+
+```bash
+cp .env.openrouter.example .env.openrouter
+```
+
+For SAM 3.1 local masks, set optional paths:
+
+```bash
+export SAM3_SOURCE_DIR=/path/to/sam3
+export SAM31_CHECKPOINT=/path/to/sam3.1_multiplex.pt
+```
+
+### 4. Run the full pipeline
+
+```bash
+python3 scripts/run_full_pipeline.py
+```
+
+Or through npm:
+
+```bash
+npm run pipeline
+```
+
+This creates a new run under:
+
+```text
+outputs/spatialflow-<timestamp>/
+```
+
+### 5. Run with human feedback
+
+```bash
+python3 scripts/run_full_pipeline.py --feedback "更空、更高级、减少植物、保留墙色和窗户，不要挡窗，地板颜色也尽量不要变"
+```
+
+## Web UI
+
+The web UI is part of the complete project, but it is no longer the only public artifact.
+
+Run locally:
+
+```bash
 npm run dev
 ```
 
@@ -47,87 +122,72 @@ Then open:
 - UI: `http://127.0.0.1:4009`
 - API: `http://127.0.0.1:4188/api/state`
 
-## Validation
+By default, the UI reads from `demo-data/default-run`, so a fresh clone already has a complete visual walkthrough.
 
-```bash
-npm run build
-```
+## Codex integration
 
-The repository also includes a GitHub Actions workflow that runs the build on every push and pull request.
-
-## Default behavior
-
-By default, the app reads from the bundled sample run in `demo-data/default-run`.
-
-That means a fresh clone will already show:
-
-- the input room
-- segmentation overlay
-- depth visualization
-- first edit pass
-- review questions
-- feedback revision
-- final edited result
-
-## Use your own pipeline outputs
-
-You can point the UI at an external workspace by setting environment variables before starting the server:
-
-```bash
-export SPATIALFLOW_PIPELINE_ROOT=/path/to/your/workspace
-export SPATIALFLOW_ROOT_RUN=spatialflow-real-0000000000
-export SPATIALFLOW_BASE_RUN=base
-export SPATIALFLOW_REVIEW_RUN=review
-export SPATIALFLOW_HITL_RUN=hitl-v2
-npm run dev
-```
-
-Expected external structure:
+The Codex-derived integration layer lives in:
 
 ```text
-workspace/
-  inputs/
-    room-dataset.png
-  outputs/
-    spatialflow-real-.../
-      base/
-        room_spatial_parser.json
-        depth_layout.json
-        action_plan.json
-        visual_edit_executor.json
-        verification.json
-        sam3_overlay.png
-        depth_vis.png
-        edited_room.png
-      review/
-        review_points.json
-      hitl-v2/
-        feedback_revision.json
-        revised_action_plan.json
-        visual_edit_executor.json
-        verification.json
-        edited_room.png
+codex-plugin/
 ```
 
-## Record a demo video
+It packages:
+
+- the plugin manifest
+- the SpatialFlow agent skill
+- the Codex-facing domain instructions
+
+That layer is included because this project was intended as Codex-based secondary development, not as a standalone frontend toy.
+
+## Sample data and outputs
+
+The repository includes:
+
+- `inputs/room-dataset.png`
+- `inputs/open_dataset/empty_room_source.metadata.json`
+- `demo-data/default-run/`
+
+This lets the repo work in two ways:
+
+1. a runnable full project with live pipeline code
+2. a deterministic sample experience for UI/demo/release purposes
+
+## Recording a demo video
 
 ```bash
 npm run record
 ```
 
-The generated files will be written to:
+The generated files are written to:
 
 ```text
 outputs/spatialflow-chat-demo/
 ```
 
-For a polished walkthrough clip, check the latest release assets.
+For a polished walkthrough clip, see the latest release assets.
+
+## Validation
+
+JavaScript build:
+
+```bash
+npm run build
+```
+
+Python syntax sanity check:
+
+```bash
+python3 -m py_compile scripts/run_full_pipeline.py tools/*.py
+```
+
+GitHub Actions also runs the web build on every push and pull request.
 
 ## Notes
 
-- The bundled sample run is included for product demonstration.
-- The UI is intentionally optimized for long-horizon conversational playback rather than a static dashboard.
-- This repository does not ship model weights or training code.
+- Some heavy models are optional and depend on your local GPU/runtime setup.
+- `SAM 3.1` support is wired in, but you must provide the local codebase and checkpoint yourself.
+- The bundled sample run exists so the project remains explorable even without a configured GPU environment.
 
 ## License
 

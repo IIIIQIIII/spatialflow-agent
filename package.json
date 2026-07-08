@@ -10,7 +10,8 @@
     "client": "vite --host 127.0.0.1",
     "build": "vite build",
     "start": "npm run build && npm run server",
-    "record": "node scripts/record-demo.js"
+    "record": "node scripts/record-demo.js",
+    "pipeline": "python3 scripts/run_full_pipeline.py"
   },
   "license": "GPL-3.0",
   "dependencies": {

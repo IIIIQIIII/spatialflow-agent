@@ -1,0 +1,118 @@
+{
+  "product_name": "SpatialFlow Agent, built on a Codex-derived foundation",
+  "goal": "Input one open-source empty-room image and transform it into a Nordic-style living room while preserving the floor, windows, walls, camera viewpoint, and room structure. Use the latest verified stack: SAM 3/SAM 3.1 + DINO-X for perception, Depth Anything 3 + Depth Pro + UniDepthV2 for depth/layout, OpenRouter openai/gpt-5.4 for planning, FLUX.2 [dev] for editing, and Qwen3-VL + SigLIP 2 for verification.",
+  "model": "openai/gpt-5.4",
+  "model_stack": [
+    {
+      "stage": "room_understanding",
+      "primary": [
+        "SAM 3 / SAM 3.1 where available",
+        "DINO-X + SAM 3 or Grounded-SAM-2",
+        "Qwen3.5 vision-language foundation"
+      ],
+      "fallback": [
+        "Grounding DINO 1.6 + SAM 2",
+        "YOLOE for real-time open-vocabulary detection/segmentation"
+      ],
+      "purpose": "Detect and segment walls, floor, ceiling, windows, doors, furniture, decor, fixed structure, and editable regions."
+    },
+    {
+      "stage": "depth_plane_layout",
+      "primary": [
+        "Depth Anything 3 / DA3METRIC-LARGE when available",
+        "Apple Depth Pro",
+        "UniDepthV2"
+      ],
+      "fallback": [
+        "Depth Anything V2 Large smoke-test fallback",
+        "RANSAC / vanishing-line / rule-based room envelope fitting"
+      ],
+      "purpose": "Estimate metric depth, planes, room envelope, free space, scale constraints, and geometry hints for editing."
+    },
+    {
+      "stage": "agent_planning",
+      "primary": [
+        "OpenRouter openai/gpt-5.4"
+      ],
+      "fallback": [],
+      "purpose": "Turn user intent and spatial state into an ordered edit plan and verifier-aware action sequence."
+    },
+    {
+      "stage": "generative_editing",
+      "primary": [
+        "FLUX.2 [dev]",
+        "FLUX.2 [max/pro/flex] via API if allowed"
+      ],
+      "fallback": [
+        "Qwen-Image-Edit for semantic/text-sensitive edits",
+        "FLUX.1 Kontext [dev] / FLUX.1 Fill only as fallback"
+      ],
+      "purpose": "Perform local/global image editing, inpainting, furniture insertion, restyling, relighting, and repair."
+    },
+    {
+      "stage": "verifier_loop",
+      "primary": [
+        "Qwen3.5-9B local / Qwen3.5-27B high-quality",
+        "SigLIP 2 giant/SO400M"
+      ],
+      "fallback": [
+        "Qwen3-VL",
+        "Geometry rules over masks, boxes, depth, and planes"
+      ],
+      "purpose": "Score structure preservation, style alignment, object plausibility, collisions, window/wall blocking, floating furniture, and artifact quality."
+    }
+  ],
+  "context_path": null,
+  "room_image_path": "inputs/room-dataset.png",
+  "send_room_image_to_model": false,
+  "output_dir": "outputs",
+  "tool_policy": {
+    "execute_by_default": false,
+    "timeout_seconds": 120
+  },
+  "tools": [
+    {
+      "name": "room_spatial_parser",
+      "stage": "perception",
+      "description": "Use SAM 3/SAM 3.1 where available, DINO-X + SAM, and Qwen3-VL to detect/segment walls, floor, windows, doors, furniture, and fixed structure.",
+      "command": "python3 tools/room_spatial_parser.py --image inputs/room-dataset.png --output \"$SPATIALFLOW_OUTPUT_DIR/room_spatial_parser.json\"",
+      "enabled": true
+    },
+    {
+      "name": "depth_layout_estimator",
+      "stage": "geometry",
+      "description": "Use Depth Anything 3 / DA3METRIC-LARGE where available, Apple Depth Pro, UniDepthV2, and geometric fitting to estimate metric depth, planes, room envelope, and editable free space.",
+      "command": "python3 tools/depth_layout_estimator.py --image inputs/room-dataset.png --spatial \"$SPATIALFLOW_OUTPUT_DIR/room_spatial_parser.json\" --output \"$SPATIALFLOW_OUTPUT_DIR/depth_layout.json\"",
+      "enabled": true
+    },
+    {
+      "name": "layout_action_planner",
+      "stage": "planning",
+      "description": "Use openrouter openai/gpt-5.4 to plan room-design edit actions over spatial state, hard constraints, and business intent.",
+      "command": "python3 tools/layout_action_planner.py --config configs/spatialflow-agent.json --spatial \"$SPATIALFLOW_OUTPUT_DIR/room_spatial_parser.json\" --layout \"$SPATIALFLOW_OUTPUT_DIR/depth_layout.json\" --output \"$SPATIALFLOW_OUTPUT_DIR/action_plan.json\"",
+      "enabled": true
+    },
+    {
+      "name": "visual_edit_executor",
+      "stage": "generation",
+      "description": "Use FLUX.2 [dev] as primary local B200 editing stack; fallback to Qwen-Image-Edit or FLUX.1 Kontext/Fill when needed.",
+      "command": "python3 tools/visual_edit_executor.py --image inputs/room-dataset.png --plan \"$SPATIALFLOW_OUTPUT_DIR/action_plan.json\" --output \"$SPATIALFLOW_OUTPUT_DIR/edited_room.png\" --metadata \"$SPATIALFLOW_OUTPUT_DIR/visual_edit_executor.json\"",
+      "enabled": true
+    },
+    {
+      "name": "visual_verifier",
+      "stage": "verification",
+      "description": "Use Qwen3.5, SigLIP 2 giant/SO400M, and geometry rules to check style match, structure preservation, non-intersection, no wall/window blocking, and artifact quality. Qwen3-VL is fallback only.",
+      "command": "python3 tools/visual_verifier.py --before inputs/room-dataset.png --after \"$SPATIALFLOW_OUTPUT_DIR/edited_room.png\" --spatial \"$SPATIALFLOW_OUTPUT_DIR/room_spatial_parser.json\" --layout \"$SPATIALFLOW_OUTPUT_DIR/depth_layout.json\" --output \"$SPATIALFLOW_OUTPUT_DIR/verification.json\"",
+      "enabled": true
+    }
+  ],
+  "verifier": {
+    "criteria": [
+      "fixed room structure is preserved",
+      "furniture layout is plausible and not floating/intersecting",
+      "style matches the user intent",
+      "output is useful for a realtor/designer workflow"
+    ]
+  }
+}
