@@ -1,0 +1,28 @@
+{
+  "stage": "generative_editing",
+  "status": "ok",
+  "target_models": [
+    "openai/gpt-image-2 via OpenRouter",
+    "openai/gpt-5.4-image-2 via OpenRouter",
+    "FLUX.2 [klein] 9B",
+    "FLUX.2 [klein] 4B",
+    "FLUX.2 [dev]",
+    "FLUX.2 [max/pro/flex] via API if allowed",
+    "Qwen-Image-Edit",
+    "FLUX.1 Kontext/Fill fallback"
+  ],
+  "selected_model": "openai/gpt-image-2",
+  "attempts": [
+    {
+      "model": "openai/gpt-image-2",
+      "status": "ok",
+      "seconds": 119.112
+    }
+  ],
+  "strategy": "interactive",
+  "input_image": "<workspace>/demo-data/inputs/room-dataset.png",
+  "plan": "<workspace>/outputs/spatialflow-real-1783516288/hitl-v2/revised_action_plan.json",
+  "output_image": "<workspace>/outputs/spatialflow-real-1783516288/hitl-v2/edited_room.png",
+  "prompt": "Transform this open-source empty room photo into a realistic Nordic / Scandinavian style living room. Preserve the exact camera viewpoint, window positions, wall geometry, floor material, and room structure. Add a light fabric sofa, wooden coffee table, neutral rug, subtle plants, warm natural lighting, and clean minimal decor. Do not change the windows, floor, ceiling, wall boundaries, or perspective. Avoid floating furniture and object intersections. Goal: Input one open-source empty-room image and transform it into a Nordic-style living room while preserving the floor, windows, walls, camera viewpoint, and room structure. Use the latest verified stack: SAM 3/SAM 3.1 + DINO-X for perception, Depth Anything 3 + Depth Pro + UniDepthV2 for depth/layout, OpenRouter openai/gpt-5.4 for planning, FLUX.2 [dev] for editing, and Qwen3-VL + SigLIP 2 for verification.. Planned actions: preserve_fixed_structure {\"name\": \"preserve_fixed_structure\", \"constraints\": [\"floor\", \"windows\", \"doors\", \"wall boundaries\"]}; define_style_target {\"name\": \"define_style_target\", \"style\": \"Scandinavian / Nordic living room when requested\"}; place_primary_furniture {\"name\": \"place_primary_furniture\", \"objects\": [\"sofa\", \"coffee_table\", \"rug\"], \"requires\": \"free_space + plane constraints\"}; harmonize_lighting {\"name\": \"harmonize_lighting\", \"requires\": \"preserve natural light and window visibility\"}; verify_and_repair {\"name\": \"verify_and_repair\", \"requires\": \"Qwen3-VL + SigLIP 2 + geometry rules\"}. Human review corrections must override the initial plan. Style correction: 更空 / more open and airy, 更高级 / more premium, refined minimal luxury, 在当前北欧基调上减少堆砌感，往 minimal editorial / premium Scandi 方向微调. Strictly preserve: 保留墙面颜色，不改变墙色 / preserve existing wall color, 保留窗户的位置、尺寸与可见性 / preserve window positions, sizes, and visibility, 保持窗前采光区域通透 / keep window daylight zones clear, 地板颜色尽量不要变，优先严格保留现有地板色调 / preserve floor color as much as possible, 保持原始房间结构与相机视角 / preserve room geometry and camera viewpoint, 保持门洞与通行关系 / preserve door geometry and circulation. Reduce: 减少植物数量，若有多盆植物则压缩到 0-1 个小型点缀 / reduce plants to none or at most one small accent plant, 减少家具与装饰密度 / reduce overall furniture and decor density, 减少视觉杂物与小摆件 / reduce clutter and small accessories, 减少靠窗家具体量与贴窗程度 / reduce furniture mass and proximity near windows. Remove: 移除任何挡窗或压窗的家具、植物、落地灯、边几、装饰物 / remove any furniture, plants, lamps, side tables, or decor that block or crowd the windows, 移除不必要的多余植物陈设 / remove nonessential plant decor. Add: 如需补充高级感，仅允许少量高质感单品：简洁艺术画、低对比软装、克制材质点缀 / if needed, add only a few high-end restrained accents such as simple art, low-contrast textiles, or refined material details, 优先通过材质、比例、留白提升高级感，而不是增加物件数量 / elevate luxury through materiality, proportion, and negative space rather than adding more items. Forbidden: 禁止遮挡任何窗户玻璃、窗框或主要采光面 / do not block any window glass, frame, or primary daylight area, 禁止明显改变墙面颜色 / do not noticeably change wall color, 禁止明显改变地板颜色 / do not noticeably change floor color, 禁止过度填满空间 / do not overfill the room, 禁止引入廉价感或繁杂装饰 / avoid cheap-looking or busy decorative styling. ",
+  "ts_unix": 1783517169
+}

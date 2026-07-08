@@ -1,0 +1,82 @@
+{
+  "stage": "depth_plane_layout",
+  "status": "ok",
+  "target_models": [
+    "Depth Anything 3 / DA3METRIC-LARGE",
+    "Apple Depth Pro",
+    "UniDepthV2",
+    "Depth Anything V2 Large fallback",
+    "RANSAC/vanishing-line geometry"
+  ],
+  "selected_model": "depth-anything/DA3METRIC-LARGE",
+  "attempts": [
+    {
+      "model": "Depth Anything 3 / DA3METRIC-LARGE",
+      "status": "ok",
+      "seconds": 6.005
+    }
+  ],
+  "input_image": "demo-data/inputs/room-dataset.png",
+  "spatial_input": "<workspace>/demo-data/default-run/base/room_spatial_parser.json",
+  "depth_npy": "<workspace>/demo-data/default-run/base/depth.npy",
+  "depth_visualization": "<workspace>/demo-data/default-run/base/depth_vis.png",
+  "confidence_npy": null,
+  "intrinsics": null,
+  "extrinsics": null,
+  "layout": {
+    "image_size": {
+      "width": 504,
+      "height": 336
+    },
+    "room_envelope": {
+      "type": "single_view_coarse_layout",
+      "floor_region_hint": [
+        0,
+        194,
+        504,
+        336
+      ],
+      "back_wall_region_hint": [
+        0,
+        0,
+        504,
+        208
+      ],
+      "left_wall_region_hint": [
+        0,
+        0,
+        141,
+        336
+      ],
+      "right_wall_region_hint": [
+        362,
+        0,
+        504,
+        336
+      ],
+      "depth_medians": {
+        "top": 2.7440919876098633,
+        "middle": 6.625154495239258,
+        "bottom": 2.571044445037842,
+        "center": 7.678314685821533
+      }
+    },
+    "free_space": {
+      "type": "heuristic_floor_band",
+      "bbox_xyxy": [
+        60,
+        208,
+        443,
+        322
+      ],
+      "purpose": "candidate furniture placement region before segmentation refinement"
+    },
+    "constraints": [
+      "preserve windows and wall boundaries",
+      "preserve floor material and perspective",
+      "avoid placing objects outside the floor/free-space band",
+      "verify furniture grounding against depth discontinuities"
+    ]
+  },
+  "ts_unix": 1783516346
+}

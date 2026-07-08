@@ -1,0 +1,28 @@
+{
+  "stage": "generative_editing",
+  "status": "ok",
+  "target_models": [
+    "openai/gpt-image-2 via OpenRouter",
+    "openai/gpt-5.4-image-2 via OpenRouter",
+    "FLUX.2 [klein] 9B",
+    "FLUX.2 [klein] 4B",
+    "FLUX.2 [dev]",
+    "FLUX.2 [max/pro/flex] via API if allowed",
+    "Qwen-Image-Edit",
+    "FLUX.1 Kontext/Fill fallback"
+  ],
+  "selected_model": "openai/gpt-image-2",
+  "attempts": [
+    {
+      "model": "openai/gpt-image-2",
+      "status": "ok",
+      "seconds": 128.611
+    }
+  ],
+  "strategy": "openrouter",
+  "input_image": "demo-data/inputs/room-dataset.png",
+  "plan": "<workspace>/demo-data/default-run/base/action_plan.json",
+  "output_image": "<workspace>/demo-data/default-run/base/edited_room.png",
+  "prompt": "Transform this open-source empty room photo into a realistic Nordic / Scandinavian style living room. Preserve the exact camera viewpoint, window positions, wall geometry, floor material, and room structure. Add a light fabric sofa, wooden coffee table, neutral rug, subtle plants, warm natural lighting, and clean minimal decor. Do not change the windows, floor, ceiling, wall boundaries, or perspective. Avoid floating furniture and object intersections. Goal: Input one open-source empty-room image and transform it into a Nordic-style living room while preserving the floor, windows, walls, camera viewpoint, and room structure. Use the latest verified stack: SAM 3/SAM 3.1 + DINO-X for perception, Depth Anything 3 + Depth Pro + UniDepthV2 for depth/layout, OpenRouter openai/gpt-5.4 for planning, FLUX.2 [dev] for editing, and Qwen3-VL + SigLIP 2 for verification.. Planned actions: preserve_fixed_structure {\"name\": \"preserve_fixed_structure\", \"constraints\": [\"floor\", \"windows\", \"doors\", \"wall boundaries\"]}; define_style_target {\"name\": \"define_style_target\", \"style\": \"Scandinavian / Nordic living room when requested\"}; place_primary_furniture {\"name\": \"place_primary_furniture\", \"objects\": [\"sofa\", \"coffee_table\", \"rug\"], \"requires\": \"free_space + plane constraints\"}; harmonize_lighting {\"name\": \"harmonize_lighting\", \"requires\": \"preserve natural light and window visibility\"}; verify_and_repair {\"name\": \"verify_and_repair\", \"requires\": \"Qwen3-VL + SigLIP 2 + geometry rules\"}.",
+  "ts_unix": 1783516880
+}

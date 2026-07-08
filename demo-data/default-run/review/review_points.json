@@ -1,0 +1,123 @@
+{
+  "stage": "human_review",
+  "status": "needs_review",
+  "review_model": "openai/gpt-5.4",
+  "source_run": "demo-data/default-run/base",
+  "current_result": {
+    "input_image": "demo-data/demo-data/inputs/room-dataset.png",
+    "edited_image": "demo-data/default-run/base/edited_room.png",
+    "demo_html": "demo-data/default-run/base/demo.html",
+    "sam3_overlay": "demo-data/default-run/base/sam3_overlay.png",
+    "depth_visualization": "demo-data/default-run/base/depth_vis.png",
+    "edit_model": "openai/gpt-image-2",
+    "verifier": {
+      "score": 0.9989357721060514,
+      "label": "pass"
+    },
+    "mask_counts": {
+      "floor": 1,
+      "wall": 5,
+      "ceiling": 1,
+      "window": 3,
+      "door": 1,
+      "free_floor_area": 0
+    }
+  },
+  "questions": [
+    {
+      "id": "style_alignment",
+      "kind": "single_choice",
+      "question": "这版结果是否已经符合用户要的 Nordic/Scandinavian living room，还是需要往更明确的北欧方向收敛？",
+      "options": [
+        "accept_current_style",
+        "make_more_scandinavian_minimal",
+        "make_warmer_and_cozier",
+        "make_more_premium_editorial"
+      ],
+      "default": "accept_current_style",
+      "why": "当前画面已具备浅木、米色、留白等北欧特征，但仍偏通用样板间；确认风格细分可避免下一轮把空间做成过于现代或过于温馨。"
+    },
+    {
+      "id": "structure_and_surface_preservation",
+      "kind": "multi_select",
+      "question": "下一轮哪些建筑结构与原始表面必须严格锁定，不允许被继续改写？",
+      "options": [
+        "keep_floor_exact",
+        "keep_window_positions_and_sizes",
+        "keep_door_and_swing",
+        "keep_wall_geometry",
+        "keep_ceiling_and_downlights",
+        "keep_air_conditioner",
+        "keep_original_wall_color_tone"
+      ],
+      "default": [
+        "keep_window_positions_and_sizes",
+        "keep_door_and_swing",
+        "keep_wall_geometry",
+        "keep_ceiling_and_downlights",
+        "keep_air_conditioner"
+      ],
+      "why": "本次编辑基本保住了相机与结构，但地板纹理/色相看起来较原图更统一、更偏设计化；若要继续迭代，需要明确哪些是 hard constraints。"
+    },
+    {
+      "id": "furniture_density_layout",
+      "kind": "single_choice",
+      "question": "当前家具密度和落位是否合适，尤其是大地毯+L型沙发占据左侧后，是否还要调整留白感？",
+      "options": [
+        "accept_density",
+        "slightly_less_furniture_more_open_floor",
+        "add_one_more_accent_piece",
+        "rework_layout_for_better_balance"
+      ],
+      "default": "accept_density",
+      "why": "SpatialFlow 客厅场景常见问题是为了“像样板间”而铺得过满；这版中央空地尚可，但右后方偏空、左侧视觉偏重，需确认是否接受这种 staging balance。"
+    },
+    {
+      "id": "openings_and_blockage",
+      "kind": "multi_select",
+      "question": "对于窗户、门洞、采光和通行动线，下一轮最需要处理哪些点？",
+      "options": [
+        "keep_all_windows_clear",
+        "reduce_sofa_near_left_windows",
+        "keep_door_fully_accessible",
+        "avoid_any_furniture_under_ac_unit",
+        "increase_visual_space_near_back_wall",
+        "no_change"
+      ],
+      "default": [
+        "keep_all_windows_clear",
+        "keep_door_fully_accessible",
+        "avoid_any_furniture_under_ac_unit"
+      ],
+      "why": "当前没有严重堵窗堵门，但左侧沙发与边几贴窗较近，后墙空调下方与门口区域需要继续作为禁摆区，保证虚拟布置符合真实可用性。"
+    },
+    {
+      "id": "wall_floor_authenticity",
+      "kind": "single_choice",
+      "question": "从虚拟 staging workflow 角度看，这版对原房屋硬装保真度是否可接受？",
+      "options": [
+        "acceptable_preservation",
+        "revise_to_match_original_floor_more_closely",
+        "revise_to_restore_more_empty_floor_visibility",
+        "revise_to_reduce_styled_surface_changes"
+      ],
+      "default": "acceptable_preservation",
+      "why": "房间结构保持良好，但地板在编辑图中呈现更深、更高对比且被大面积地毯覆盖；如果用户重视“保留原地板可见性”，则应回修。"
+    },
+    {
+      "id": "acceptance_decision",
+      "kind": "single_choice",
+      "question": "这个版本是直接接受，还是进入一轮针对性 revision？",
+      "options": [
+        "accept_final",
+        "revise_fast",
+        "revise_and_final_render"
+      ],
+      "default": "revise_fast",
+      "why": "结果整体成功、风格达标、无明显结构错误，但仍存在地板保真度与空间平衡可优化点，适合小幅精修而非推倒重来。"
+    }
+  ],
+  "recommended_next_action": "Run one targeted revise pass: preserve camera, windows, door, wall geometry, ceiling lights, and AC exactly; keep Nordic style; slightly rebalance the room by reducing visual weight near the left windows, preserving more visible original floor character, and maintaining completely clear window and door access. If user approves current styling, proceed with revise_fast; otherwise branch prompt by selected style direction.",
+  "visual_critique": "The edit reads convincingly as a Nordic staged living room: light neutral sofa, pale wood media console and coffee table, restrained decor, soft beige rug, and uncluttered styling all align with SpatialFlow living-room merchandising goals. Structure preservation is strong: camera viewpoint, window placements, door location, wall geometry, recessed lights, and wall AC unit are all retained consistently with the SAM3 overlay and depth layout. The main review concern is hard-surface fidelity: the edited floor appears more curated and visually transformed than a strict 'preserve original floor' workflow would prefer, and the large rug hides much of the floor area, making it harder to verify preservation. Furniture density is generally safe and not overcrowded, but the composition is left-heavy because the sectional, side table, and plant cluster gather around the window wall while the back-right zone remains sparse. Windows are not blocked, though the sofa/side table sit close enough to the left glazing that a stricter staging pass could pull them a bit inward. Door circulation remains open and realistic. Overall: good first-pass staging, likely acceptable for many users, but a small revision would better honor floor preservation and improve spatial balance.",
+  "ts_unix": 1783517019
+}

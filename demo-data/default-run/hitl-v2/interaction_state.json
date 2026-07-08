@@ -1,0 +1,25 @@
+{
+  "stage": "interaction_state",
+  "status": "revision_ready",
+  "source_run": "demo-data/default-run/base",
+  "review_points": "demo-data/default-run/base/review_points.json",
+  "feedback_revision": "demo-data/default-run/base/feedback_revision.json",
+  "versions": [
+    {
+      "version": "v1",
+      "run_dir": "demo-data/default-run/base",
+      "edited_image": "demo-data/default-run/base/edited_room.png",
+      "verification": "demo-data/default-run/base/verification.json",
+      "status": "reviewed"
+    },
+    {
+      "version": "v2_planned",
+      "parent": "v1",
+      "revised_plan": "outputs/spatialflow-real-1783516288/hitl-v2/revised_action_plan.json",
+      "status": "ready_for_fast_rerun",
+      "recommended_edit_strategy": "局部精修 / targeted edit pass with strict preservation locks on wall color, windows, floor color, door geometry, and camera; adjust only furniture/decor density, plant count, and window clearance"
+    }
+  ],
+  "pending_user_decision": false,
+  "ts_unix": 1783517049
+}

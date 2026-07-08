@@ -1,0 +1,123 @@
+{
+  "stage": "human_review",
+  "status": "needs_review",
+  "review_model": "openai/gpt-5.4",
+  "source_run": "demo-data/default-run/base",
+  "current_result": {
+    "input_image": "demo-data/demo-data/inputs/room-dataset.png",
+    "edited_image": "demo-data/default-run/base/edited_room.png",
+    "demo_html": "demo-data/default-run/base/demo.html",
+    "sam3_overlay": "demo-data/default-run/base/sam3_overlay.png",
+    "depth_visualization": "demo-data/default-run/base/depth_vis.png",
+    "edit_model": "openai/gpt-image-2",
+    "verifier": {
+      "score": 0.9989357721060514,
+      "label": "pass"
+    },
+    "mask_counts": {
+      "floor": 1,
+      "wall": 5,
+      "ceiling": 1,
+      "window": 3,
+      "door": 1,
+      "free_floor_area": 0
+    }
+  },
+  "questions": [
+    {
+      "id": "style_fit",
+      "kind": "single_choice",
+      "question": "The staging reads as soft Scandinavian/Nordic with light oak, beige upholstery, simple decor, and low visual clutter. Is this the intended target style, or should the next pass push the look in a different Nordic direction?",
+      "options": [
+        "accept_current_nordic",
+        "more_minimal_editorial",
+        "warmer_cozier_hygge",
+        "more_premium_luxury_scandi"
+      ],
+      "default": "accept_current_nordic",
+      "why": "In SpatialFlow staging, small style shifts change wood tone, textile weight, decor quantity, and overall market positioning without changing layout."
+    },
+    {
+      "id": "structure_preservation",
+      "kind": "multi_select",
+      "question": "Which architectural elements should be treated as hard-preserve constraints in the next edit pass?",
+      "options": [
+        "keep_floor_exact",
+        "keep_window_positions_and_sizes",
+        "keep_door_and_swing_visibility",
+        "keep_wall_geometry",
+        "keep_ceiling_lights",
+        "keep_air_conditioner",
+        "keep_outlets_and_vents"
+      ],
+      "default": [
+        "keep_floor_exact",
+        "keep_window_positions_and_sizes",
+        "keep_door_and_swing_visibility",
+        "keep_wall_geometry",
+        "keep_ceiling_lights",
+        "keep_air_conditioner"
+      ],
+      "why": "The current result preserves the camera/viewpoint well, but architectural constraints must stay locked so revision only adjusts furnishings and styling."
+    },
+    {
+      "id": "furniture_density",
+      "kind": "single_choice",
+      "question": "Does the current furniture density feel appropriate for this room size, considering circulation from the glass door and openness near the windows?",
+      "options": [
+        "accept_density",
+        "slightly_less_furniture",
+        "add_one_or_two_pieces",
+        "keep_only_hero_furniture"
+      ],
+      "default": "accept_density",
+      "why": "Virtual staging often fails by overfilling large empty rooms; this version is balanced, but the room still has substantial open floor that could be intentionally kept or lightly activated."
+    },
+    {
+      "id": "window_door_clearance",
+      "kind": "multi_select",
+      "question": "Should the next revision tighten any clearance rules around windows and the right-side door?",
+      "options": [
+        "keep_left_windows_fully_clear",
+        "reduce_sofa_proximity_to_window_wall",
+        "keep_center_window_clear",
+        "keep_door_swing_and_entry_zone_clear",
+        "move_console_farther_from_door_zone"
+      ],
+      "default": [
+        "keep_left_windows_fully_clear",
+        "keep_center_window_clear",
+        "keep_door_swing_and_entry_zone_clear"
+      ],
+      "why": "The sofa sits close to the left window wall and the console is near the door-side circulation path; these are common staging review points for listing realism and usability."
+    },
+    {
+      "id": "floor_and_wall_integrity",
+      "kind": "single_choice",
+      "question": "The edit appears to preserve room structure, but the visible wood floor tone/pattern looks somewhat transformed from the source. Should the next pass prioritize stricter material preservation of existing floor/walls, or is the current level acceptable for staging?",
+      "options": [
+        "accept_current_preservation",
+        "preserve_floor_more_strictly",
+        "preserve_wall_color_more_strictly",
+        "preserve_both_floor_and_walls_more_strictly"
+      ],
+      "default": "preserve_floor_more_strictly",
+      "why": "For SpatialFlow workflows, flooring drift is a high-impact issue because buyers may interpret staged outputs as showing actual installed finishes."
+    },
+    {
+      "id": "acceptance_decision",
+      "kind": "single_choice",
+      "question": "Given the good Nordic styling and structure retention but possible floor-material drift, should this result be accepted or revised?",
+      "options": [
+        "accept_final",
+        "revise_fast",
+        "revise_with_strict_material_preservation"
+      ],
+      "default": "revise_with_strict_material_preservation",
+      "why": "The scene is commercially usable, but a targeted revision can better honor the source floor while keeping the current furniture plan and Nordic mood."
+    }
+  ],
+  "recommended_next_action": "Run a targeted revision pass that locks floor texture/color, windows, door geometry, ceiling lights, and wall structure; keep the current Scandinavian furniture layout largely intact, maintain clear window and door access, and only make small spacing adjustments if needed near the left windows and right-side entry zone.",
+  "visual_critique": "The result succeeds as a SpatialFlow-style Nordic living room: clean beige palette, light wood furniture, restrained decor, and believable staging scale relative to the room depth. Camera viewpoint and overall room geometry are preserved well, and the windows, door, recessed lights, and wall-mounted air conditioner remain in plausible positions. The main review issue is material preservation: compared with the SAM overlay/source room, the edited floor reads noticeably different in tone and plank character, which is risky for virtual staging because flooring should usually remain visually faithful unless the task explicitly includes renovation. Furniture density is appropriate and not overcrowded; circulation through the center and toward the glass door is mostly open. The sofa placement along the left window wall is acceptable but close enough that some reviewers may prefer slightly more breathing room to avoid any impression of blocking natural light. The console on the right wall is visually balanced and does not appear to obstruct the door swing, though keeping that entry zone explicitly protected in the next pass would be prudent. Wall and ceiling preservation are strong, and decor quantity is consistent with Nordic styling rather than generic over-staging. Overall: strong staging composition, likely revise only for stricter source-floor fidelity and minor clearance refinement rather than redesign.",
+  "ts_unix": 1783517039
+}

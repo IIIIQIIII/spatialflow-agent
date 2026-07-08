@@ -1,0 +1,50 @@
+{
+  "stage": "verifier_loop",
+  "status": "ok",
+  "target_models": [
+    "Qwen3.5-9B / Qwen3.5-27B",
+    "SigLIP 2 giant/SO400M",
+    "Qwen3-VL fallback",
+    "mask/depth/box geometry rules"
+  ],
+  "inputs": {
+    "before": "<workspace>/demo-data/inputs/room-dataset.png",
+    "after": "<workspace>/outputs/spatialflow-real-1783516288/hitl-v2/edited_room.png",
+    "spatial": "<workspace>/demo-data/default-run/base/room_spatial_parser.json",
+    "layout": "<workspace>/demo-data/default-run/base/depth_layout.json"
+  },
+  "attempts": [
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "status": "ok",
+      "seconds": 30.464
+    },
+    {
+      "model": "google/siglip2-so400m-patch14-384",
+      "status": "ok",
+      "seconds": 7.212
+    }
+  ],
+  "qwen_review_model": "Qwen/Qwen3.5-9B",
+  "qwen_review_raw": "The user wants me to compare two images of a room.\nImage A is the \"before\" state: an empty room with hardwood floors, beige walls, and windows.\nImage B is the \"after\" state: the same room furnished with a sectional sofa, coffee table, rug, and artwork.\n\nMy task is to evaluate the transformation based on specific criteria:\n1.  **Structure Preservation:** Does the room's layout, walls, and floor remain the same?\n    *   Looking at Image B, the floor pattern matches Image A perfectly. The windows are in the same places. The door is in the same place. The air conditioner is in the same place. The walls are the same color. The camera angle is identical.\n    *   Score: 1 (Perfect preservation).\n\n2.  **Style Alignment:** Is it a realistic Nordic/Scandinavian living room?\n    *   The furniture is a light-colored sectional (beige/cream), which fits the Nordic aesthetic.\n    *   The rug is a light, textured jute or sisal style, very common in Scandinavian design.\n    *   The coffee table is simple, light wood.\n    *   The artwork is a simple, framed print of a tree/nature scene, fitting the theme.\n    *   The throw blanket is a neutral beige.\n    *   The overall color palette is neutral (whites, beiges, light woods).\n    *   Score: 1 (Excellent alignment).\n\n3.  **Object Plausibility:** Do the objects look real and placed correctly?\n    *   The sofa looks like a real piece of furniture.\n    *   The rug is placed under the sofa and table correctly.\n    *   The coffee table is centered.\n    *   The artwork hangs at a reasonable height.\n    *   The lighting on the furniture looks consistent with the room's lighting.\n    *   Score: 1 (Very plausible).\n\n4.  **Artifact Quality:** Are there any weird glitches or bad blending?\n    *   The shadows under the sofa and table look natural.\n    *   The reflection on the floor from the windows is consistent.\n    *   The edges of the furniture blend well with the floor.\n    *   The artwork frame looks sharp.\n    *   Score: 1 (High quality).\n\n5.  **Floor/Window/Wall Preserved:**\n    *   Floor:",
+  "qwen_review_json": null,
+  "siglip2": {
+    "model": "google/siglip2-so400m-patch14-384",
+    "scores": {
+      "nordic_living_room": 0.9999841451644897,
+      "empty_room": 0.000008939634426496923,
+      "distorted_artifacts": 0.00000696219422025024
+    }
+  },
+  "geometry_rules": {
+    "status": "ok",
+    "structure_edge_density_similarity": 0.9955545552074909,
+    "floor_region_mean_delta": 0.10535243913239124,
+    "floor_preservation_pass": true
+  },
+  "final_verdict": {
+    "score": 0.9977693501859903,
+    "label": "pass"
+  },
+  "ts_unix": 1783517207
+}

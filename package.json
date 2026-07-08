@@ -1,0 +1,32 @@
+{
+  "name": "spatialflow-agent",
+  "version": "0.1.0",
+  "description": "Spatial visual agent harness for room understanding, image editing, verifier review, and human feedback.",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
+    "server": "node server/index.js",
+    "client": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "start": "npm run build && npm run server",
+    "record": "node scripts/record-demo.js"
+  },
+  "license": "GPL-3.0",
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "concurrently": "^8.2.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "lucide-react": "^0.515.0",
+    "playwright-core": "^1.57.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "vite": "^7.0.4"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0"
+  }
+}

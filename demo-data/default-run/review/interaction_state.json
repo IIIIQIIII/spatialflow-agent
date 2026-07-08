@@ -1,0 +1,18 @@
+{
+  "stage": "interaction_state",
+  "status": "open",
+  "source_run": "demo-data/default-run/base",
+  "review_points": "demo-data/default-run/base/review_points.json",
+  "feedback_revision": null,
+  "versions": [
+    {
+      "version": "v1",
+      "run_dir": "demo-data/default-run/base",
+      "edited_image": "demo-data/default-run/base/edited_room.png",
+      "verification": "demo-data/default-run/base/verification.json",
+      "status": "awaiting_human_review"
+    }
+  ],
+  "pending_user_decision": true,
+  "ts_unix": 1783517019
+}

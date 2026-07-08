@@ -1,0 +1,295 @@
+{
+  "stage": "room_understanding",
+  "status": "ok",
+  "target_models": [
+    "jetjodh/sam3.1 checkpoint with Meta SAM3.1 multiplex code",
+    "Qwen3.5 vision-language foundation"
+  ],
+  "selected_model": "Qwen/Qwen3.5-9B",
+  "input_image": "demo-data/inputs/room-dataset.png",
+  "attempts": [
+    {
+      "model": "Qwen/Qwen3.5-9B",
+      "status": "ok",
+      "seconds": 36.609
+    },
+    {
+      "model": "jetjodh/sam3.1",
+      "status": "ok",
+      "seconds": 13.091
+    }
+  ],
+  "qwen_raw": "**Analyzing the Room Image**\n\nOkay, so I've got this image of a room, and my job is to break it down into a structured JSON format. Let's see... First, I need to identify the room type. It's pretty clearly a living room or a large bedroom, given the size and the layout. I'll probably go with \"living room\" as the default, but I'll keep an open mind.\n\nNext, I need to list out the fixed structures. I see walls, a floor, and a ceiling. Those are pretty standard. I'll need to note their locations and whether they need to be preserved. The windows and doors are also fixed, so I'll make sure to include those. I'll need to be careful about the trim, too, as that's often a key design element.\n</think>\n\n```json\n{\n  \"room_type\": \"living room\",\n  \"fixed_structure\": [\n    {\n      \"label\": \"floor\",\n      \"location\": \"bottom\",\n      \"preserve\": true,\n      \"notes\": \"Wide plank wood flooring with a herringbone or staggered pattern.\"\n    },\n    {\n      \"label\": \"ceiling\",\n      \"location\": \"top\",\n      \"preserve\": true,\n      \"notes\": \"Flat white ceiling with recessed lighting.\"\n    },\n    {\n      \"label\": \"wall\",\n      \"location\": \"left\",\n      \"preserve\": true,\n      \"notes\": \"Painted in a neutral beige tone.\"\n    },\n    {\n      \"label\": \"wall\",\n      \"location\": \"center\",\n      \"preserve\": true,\n      \"notes\": \"Back wall with windows and an AC unit.\"\n    },\n    {\n      \"label\": \"wall\",\n      \"location\": \"right\",\n      \"preserve\": true,\n      \"notes\": \"Right wall with a door and electrical outlets.\"\n    },\n    {\n      \"label\": \"window\",\n      \"location\": \"left\",\n      \"preserve\": true,\n      \"notes\": \"Two large windows on the left wall.\"\n    },\n    {\n      \"label\": \"window\",\n      \"location\": \"center\",\n      \"preserve\": true,\n      \"notes\": \"Single window on the back wall.\"\n    },\n    {\n      \"label\": \"door\",\n      \"location\": \"right\",\n      \"preserve\": true,\n      \"notes\": \"White French door leading to another room.\"\n    },\n    {\n      \"label\": \"trim\",\n      \"location\": \"bottom\",\n      \"preserve\": true,\n      \"notes\": \"White baseboards along the perimeter.\"\n    },\n    {\n      \"label\": \"fixture\",\n      \"location\": \"center\",\n      \"preserve\": true,\n      \"notes\": \"Wall-mounted air conditioning unit.\"\n    }\n  ],\n  \"editable_regions\": [\n    {\n      \"label\": \"free floor area\",\n      \"location\": \"bottom\",\n      \"notes\": \"Large open space suitable for furniture placement.\"\n    },\n    {\n      \"label\": \"empty wall area\",\n      \"location\": \"center\",\n      \"notes\": \"Space between the window and the AC unit is suitable for art or shelving.\"\n    },\n    {\n      \"label\": \"decor candidate\",\n      \"location\": \"right\",\n      \"notes\": \"Wall space near the door and outlets is available for decor.\"\n    }\n  ],\n ",
+  "room_state": {
+    "room_type": "empty_room",
+    "fixed_structure": [
+      {
+        "label": "floor",
+        "location": "bottom",
+        "preserve": true,
+        "notes": "large wood floor region"
+      },
+      {
+        "label": "ceiling",
+        "location": "top",
+        "preserve": true,
+        "notes": "white ceiling with recessed lights"
+      },
+      {
+        "label": "windows",
+        "location": "left and center",
+        "preserve": true,
+        "notes": "multiple visible windows"
+      },
+      {
+        "label": "door",
+        "location": "right",
+        "preserve": true,
+        "notes": "glass door/open doorway"
+      },
+      {
+        "label": "walls",
+        "location": "left center right",
+        "preserve": true,
+        "notes": "neutral wall planes"
+      }
+    ],
+    "editable_regions": [
+      {
+        "label": "free floor area",
+        "location": "bottom center",
+        "notes": "candidate sofa/rug/coffee-table placement"
+      },
+      {
+        "label": "empty wall area",
+        "location": "right wall",
+        "notes": "candidate art or lighting but preserve outlets/vents"
+      }
+    ],
+    "existing_objects": [],
+    "scene_graph": [
+      {
+        "subject": "floor",
+        "relation": "below",
+        "object": "walls"
+      },
+      {
+        "subject": "windows",
+        "relation": "embedded_in",
+        "object": "walls"
+      },
+      {
+        "subject": "free floor area",
+        "relation": "supports",
+        "object": "future furniture"
+      }
+    ],
+    "hard_constraints": [
+      "preserve floor material and perspective",
+      "preserve all windows and door geometry",
+      "keep camera viewpoint unchanged",
+      "place furniture only on floor/free-space region"
+    ],
+    "uncertainty": [
+      "fallback heuristic used instead of Qwen3.5"
+    ],
+    "image_size": {
+      "width": 1280,
+      "height": 853
+    }
+  },
+  "mask_status": "ok",
+  "sam31_masks": {
+    "status": "ok",
+    "model": "jetjodh/sam3.1",
+    "checkpoint": "<workspace>/models/sam3/sam3.1_multiplex.pt",
+    "codebase": "/home/ubuntu/projects/sam3",
+    "prompts": [
+      "floor",
+      "wall",
+      "ceiling",
+      "window",
+      "door",
+      "free floor area"
+    ],
+    "overlay_path": "demo-data/default-run/base/sam3_overlay.png",
+    "mask_dir": "demo-data/default-run/base/sam3_masks",
+    "runtime_log": "<workspace>/demo-data/default-run/base/sam3_runtime.log",
+    "results": [
+      {
+        "prompt": "floor",
+        "instances": [
+          {
+            "object_id": 0,
+            "score": 0.9649122953414917,
+            "box_xywh": [
+              0,
+              0.6178509593009949,
+              0.9994222521781921,
+              0.3812825083732605
+            ],
+            "area_px": 622515,
+            "area_ratio": 0.311636,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/floor_0.png"
+          }
+        ]
+      },
+      {
+        "prompt": "wall",
+        "instances": [
+          {
+            "object_id": 0,
+            "score": 0.8709677457809448,
+            "box_xywh": [
+              0.6562680602073669,
+              0.1065857857465744,
+              0.3431542217731476,
+              0.7504332661628723
+            ],
+            "area_px": 285992,
+            "area_ratio": 0.14317,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/wall_0.png"
+          },
+          {
+            "object_id": 1,
+            "score": 0.859649121761322,
+            "box_xywh": [
+              0.019064124673604965,
+              0.21057192981243134,
+              0.2576545178890228,
+              0.5372617244720459
+            ],
+            "area_px": 70754,
+            "area_ratio": 0.03542,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/wall_1.png"
+          },
+          {
+            "object_id": 2,
+            "score": 0.8904109597206116,
+            "box_xywh": [
+              0.27787405252456665,
+              0.3604852557182312,
+              0.37723857164382935,
+              0.25129982829093933
+            ],
+            "area_px": 132659,
+            "area_ratio": 0.06641,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/wall_2.png"
+          },
+          {
+            "object_id": 3,
+            "score": 0.7538461089134216,
+            "box_xywh": [
+              0.6967070698738098,
+              0.3604852557182312,
+              0.04563835635781288,
+              0.25216639041900635
+            ],
+            "area_px": 7357,
+            "area_ratio": 0.003683,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/wall_3.png"
+          },
+          {
+            "object_id": 4,
+            "score": 0.7887788414955139,
+            "box_xywh": [
+              0,
+              0.03986135125160217,
+              0.03928364813327789,
+              0.8587521910667419
+            ],
+            "area_px": 45292,
+            "area_ratio": 0.022674,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/wall_4.png"
+          }
+        ]
+      },
+      {
+        "prompt": "ceiling",
+        "instances": [
+          {
+            "object_id": 0,
+            "score": 0.9726027250289917,
+            "box_xywh": [
+              0,
+              0,
+              0.9994222521781921,
+              0.3604852557182312
+            ],
+            "area_px": 563851,
+            "area_ratio": 0.282268,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/ceiling_0.png"
+          }
+        ]
+      },
+      {
+        "prompt": "window",
+        "instances": [
+          {
+            "object_id": 0,
+            "score": 0.8904109597206116,
+            "box_xywh": [
+              0.17504331469535828,
+              0.327556312084198,
+              0.08376660943031311,
+              0.26083189249038696
+            ],
+            "area_px": 35629,
+            "area_ratio": 0.017836,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/window_0.png"
+          },
+          {
+            "object_id": 2,
+            "score": 0.8476190567016602,
+            "box_xywh": [
+              0.03177354112267494,
+              0.253032922744751,
+              0.12824955582618713,
+              0.3804159462451935
+            ],
+            "area_px": 81406,
+            "area_ratio": 0.040752,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/window_2.png"
+          },
+          {
+            "object_id": 3,
+            "score": 0.9298245906829834,
+            "box_xywh": [
+              0.31657999753952026,
+              0.37954938411712646,
+              0.11842864751815796,
+              0.17764298617839813
+            ],
+            "area_px": 40709,
+            "area_ratio": 0.020379,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/window_3.png"
+          }
+        ]
+      },
+      {
+        "prompt": "door",
+        "instances": [
+          {
+            "object_id": 0,
+            "score": 0.9259259104728699,
+            "box_xywh": [
+              0.6857307553291321,
+              0.3821490406990051,
+              0.04332755506038666,
+              0.246100515127182
+            ],
+            "area_px": 18749,
+            "area_ratio": 0.009386,
+            "mask_path": "<workspace>/demo-data/default-run/base/sam3_masks/door_0.png"
+          }
+        ]
+      },
+      {
+        "prompt": "free floor area",
+        "instances": []
+      }
+    ],
+    "seconds": 13.091
+  },
+  "ts_unix": 1783516339
+}

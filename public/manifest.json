@@ -1,0 +1,8 @@
+{
+  "name": "SpatialFlow Agent",
+  "short_name": "SpatialFlow",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff"
+}

@@ -1,0 +1,12 @@
+{
+  "name": "default-run",
+  "prompt": "把这个空房间变成北欧风客厅，保留地板和窗户结构。",
+  "feedback": "更空、更高级、减少植物、保留墙色和窗户，不要挡窗，地板颜色也尽量不要变",
+  "input": "demo-data/inputs/room-dataset.png",
+  "dirs": {
+    "base": "base",
+    "review": "review",
+    "hitl": "hitl-v2"
+  },
+  "description": "Bundled sample run for the public SpatialFlow Agent demo UI."
+}

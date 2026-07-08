@@ -1,0 +1,44 @@
+{
+  "stage": "agent_planning",
+  "status": "contract_ready",
+  "planner_model": "openai/gpt-5.4",
+  "goal": "Input one open-source empty-room image and transform it into a Nordic-style living room while preserving the floor, windows, walls, camera viewpoint, and room structure. Use the latest verified stack: SAM 3/SAM 3.1 + DINO-X for perception, Depth Anything 3 + Depth Pro + UniDepthV2 for depth/layout, OpenRouter openai/gpt-5.4 for planning, FLUX.2 [dev] for editing, and Qwen3-VL + SigLIP 2 for verification.",
+  "inputs": {
+    "spatial": "<workspace>/demo-data/default-run/base/room_spatial_parser.json",
+    "layout": "<workspace>/demo-data/default-run/base/depth_layout.json"
+  },
+  "actions": [
+    {
+      "name": "preserve_fixed_structure",
+      "constraints": [
+        "floor",
+        "windows",
+        "doors",
+        "wall boundaries"
+      ]
+    },
+    {
+      "name": "define_style_target",
+      "style": "Scandinavian / Nordic living room when requested"
+    },
+    {
+      "name": "place_primary_furniture",
+      "objects": [
+        "sofa",
+        "coffee_table",
+        "rug"
+      ],
+      "requires": "free_space + plane constraints"
+    },
+    {
+      "name": "harmonize_lighting",
+      "requires": "preserve natural light and window visibility"
+    },
+    {
+      "name": "verify_and_repair",
+      "requires": "Qwen3-VL + SigLIP 2 + geometry rules"
+    }
+  ],
+  "next_impl": "Move this planner call into OpenRouter openai/gpt-5.4 with spatial/layout JSON as context and require strict action JSON.",
+  "ts_unix": 1783516347
+}
