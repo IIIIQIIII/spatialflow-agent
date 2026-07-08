@@ -100,22 +100,43 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Optional model/API setup
+### 3. Live pipeline model/API setup
 
-Copy the OpenRouter template if you want image editing and GPT-based review:
+For the real editing pipeline, OpenRouter access is required for image editing and GPT-based review:
 
 ```bash
 cp .env.openrouter.example .env.openrouter
 ```
 
-For SAM 3.1 local masks, set optional paths:
+For SAM 3.1 local masks, point the repo at your local SAM 3 codebase and checkpoint:
 
 ```bash
 export SAM3_SOURCE_DIR=/path/to/sam3
 export SAM31_CHECKPOINT=/path/to/sam3.1_multiplex.pt
 ```
 
-### 4. Run the full pipeline
+If you want the SAM 3.1 mask path to run for real instead of falling back, install the local SAM 3 package into the same venv:
+
+```bash
+pip install -e "$SAM3_SOURCE_DIR" pycocotools
+```
+
+The Python requirements now include the extra runtime pieces needed by the default B200 path:
+
+- `torchvision` for the Qwen3.5 visual routes
+- `iopath` for the SAM 3.1 codebase import path
+- `numpy<2` and `opencv-python<5` so the base environment stays compatible with the editable SAM 3 install
+
+### 4. Install JavaScript runtime on a fresh Ubuntu GPU box
+
+If `node` or `npm` is missing:
+
+```bash
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+```
+
+### 5. Run the full pipeline
 
 ```bash
 python3 scripts/run_full_pipeline.py
@@ -133,13 +154,13 @@ This creates a new run under:
 outputs/spatialflow-<timestamp>/
 ```
 
-### 5. Run with human feedback
+### 6. Run with human feedback
 
 ```bash
 python3 scripts/run_full_pipeline.py --feedback "更空、更高级、减少植物、保留墙色和窗户，不要挡窗，地板颜色也尽量不要变"
 ```
 
-### 6. Run the no-GPU smoke test
+### 7. Run the no-GPU smoke test
 
 ```bash
 npm run smoke:check
@@ -233,6 +254,22 @@ Full smoke test:
 npm run smoke:check
 ```
 
+Live B200-style verification:
+
+```bash
+npm install
+npm run build
+python3 scripts/run_full_pipeline.py --run-id spatialflow-live-check
+```
+
+Validated on an NVIDIA B200 SXM6 on July 8, 2026 from a fresh GitHub clone with the live path:
+
+- `Qwen/Qwen3.5-9B` for room understanding
+- `jetjodh/sam3.1` for masks and overlay output
+- `openai/gpt-image-2` for editing
+- `google/siglip2-so400m-patch14-384` plus `Qwen/Qwen3.5-9B` for verification
+- `openai/gpt-5.4` for review question generation
+
 GitHub Actions now runs:
 
 - web build
@@ -244,6 +281,7 @@ GitHub Actions now runs:
 
 - Some heavy models are optional and depend on your local GPU/runtime setup.
 - `SAM 3.1` support is wired in, but you must provide the local codebase and checkpoint yourself.
+- The live edit path expects a valid `OPENROUTER_API_KEY`; without it, the smoke path still works but the real edit/review steps will fail.
 - The bundled sample run exists so the project remains explorable even without a configured GPU environment.
 
 ## License

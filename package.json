@@ -1,6 +1,6 @@
 {
   "name": "spatialflow-agent",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Spatial visual agent harness for room understanding, image editing, verifier review, and human feedback.",
   "type": "module",
   "main": "server/index.js",

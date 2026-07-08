@@ -1,8 +1,10 @@
-numpy
+numpy<2
 Pillow
 torch
+torchvision
 transformers
-opencv-python
+opencv-python<5
 diffusers
 accelerate
 safetensors
+iopath
