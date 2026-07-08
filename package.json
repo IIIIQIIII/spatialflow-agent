@@ -11,7 +11,8 @@
     "build": "vite build",
     "start": "npm run build && npm run server",
     "record": "node scripts/record-demo.js",
-    "pipeline": "python3 scripts/run_full_pipeline.py"
+    "pipeline": "python3 scripts/run_full_pipeline.py",
+    "smoke": "python3 scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-local"
   },
   "license": "GPL-3.0",
   "dependencies": {

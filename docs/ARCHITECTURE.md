@@ -185,6 +185,23 @@ Environment-dependent:
 - local SAM 3 / SAM 3.1 code and checkpoint
 - optional heavy vision/editing model installs
 
+## Smoke-test mode
+
+The repository also supports a no-model smoke path:
+
+```bash
+python3 scripts/run_full_pipeline.py --smoke-test
+```
+
+This mode:
+
+- copies bundled sample artifacts from `demo-data/default-run/`
+- writes a fresh `outputs/spatialflow-smoke-.../`
+- generates `trace.json`, `bundle.json`, and `demo.html`
+- avoids all heavy model execution
+
+It exists so the full project can be validated in CI and inspected on ordinary machines without weakening the complete architecture.
+
 ## Design intent
 
 The repo is meant to be legible in two modes:

@@ -4,6 +4,7 @@ import json
 import os
 import pathlib
 import shlex
+import shutil
 import subprocess
 import sys
 import time
@@ -51,6 +52,17 @@ def artifact(path):
 
 def relpath(from_dir, target):
     return os.path.relpath(str(target), str(from_dir))
+
+
+def copy_tree(src, dst):
+    src = pathlib.Path(src)
+    dst = pathlib.Path(dst)
+    if not src.exists():
+        return False
+    if dst.exists():
+        shutil.rmtree(dst)
+    shutil.copytree(src, dst)
+    return True
 
 
 def summary_html(run_root, bundle):
@@ -114,6 +126,82 @@ def summary_html(run_root, bundle):
     return html
 
 
+def build_smoke_run(repo_root, run_root, run_id, config, image_path):
+    sample_root = repo_root / "demo-data" / "default-run"
+    base_dir = run_root / "base"
+    review_dir = run_root / "review"
+    hitl_dir = run_root / "hitl-v2"
+    copied = {
+        "base": copy_tree(sample_root / "base", base_dir),
+        "review": copy_tree(sample_root / "review", review_dir),
+        "hitl": copy_tree(sample_root / "hitl-v2", hitl_dir),
+    }
+    steps = [
+        {
+            "name": "smoke_sample_materialization",
+            "command": ["copy", "demo-data/default-run", str(run_root)],
+            "returncode": 0 if copied["base"] else 1,
+            "seconds": 0.0,
+            "stdout_path": None,
+            "stderr_path": None,
+            "status": "ok" if copied["base"] else "failed",
+            "mode": "smoke-test",
+        }
+    ]
+    trace = {
+        "run_id": run_id,
+        "mode": "smoke-test",
+        "config": str(repo_root / "configs" / "spatialflow-agent.json"),
+        "input_image": str(image_path),
+        "steps": steps,
+        "ts_unix": int(time.time()),
+    }
+    write_json(run_root / "trace.json", trace)
+
+    review = read_json(review_dir / "review_points.json") if (review_dir / "review_points.json").exists() else {}
+    revision = read_json(hitl_dir / "feedback_revision.json") if (hitl_dir / "feedback_revision.json").exists() else {}
+    base_verify = read_json(base_dir / "verification.json") if (base_dir / "verification.json").exists() else {}
+    hitl_verify = read_json(hitl_dir / "verification.json") if (hitl_dir / "verification.json").exists() else {}
+    base_edit = read_json(base_dir / "visual_edit_executor.json") if (base_dir / "visual_edit_executor.json").exists() else {}
+    hitl_edit = read_json(hitl_dir / "visual_edit_executor.json") if (hitl_dir / "visual_edit_executor.json").exists() else {}
+
+    bundle = {
+        "product_name": config.get("product_name"),
+        "run_id": run_id,
+        "mode": "smoke-test",
+        "goal": config.get("goal"),
+        "input_image": str(image_path),
+        "paths": {
+            "base": str(base_dir),
+            "review": str(review_dir),
+            "hitl": str(hitl_dir),
+        },
+        "models": {
+            "planner": config.get("model"),
+            "edit_v1": base_edit.get("selected_model"),
+            "edit_v2": hitl_edit.get("selected_model"),
+        },
+        "verdicts": {
+            "v1": (base_verify.get("final_verdict") or {}).get("label"),
+            "v2": (hitl_verify.get("final_verdict") or {}).get("label"),
+        },
+        "review": review,
+        "revision": revision,
+        "trace_path": str(run_root / "trace.json"),
+        "ts_unix": int(time.time()),
+    }
+    write_json(run_root / "bundle.json", bundle)
+    (run_root / "demo.html").write_text(summary_html(run_root, bundle), encoding="utf-8")
+    return {
+        "status": "ok" if copied["base"] else "failed",
+        "mode": "smoke-test",
+        "run_root": str(run_root),
+        "trace": str(run_root / "trace.json"),
+        "bundle": str(run_root / "bundle.json"),
+        "demo": str(run_root / "demo.html"),
+    }
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="configs/spatialflow-agent.json")
@@ -121,14 +209,24 @@ def main():
     ap.add_argument("--run-id")
     ap.add_argument("--feedback")
     ap.add_argument("--strategy", default="interactive", choices=["interactive", "final", "openrouter", "klein-only"])
+    ap.add_argument("--smoke-test", action="store_true", help="Materialize a full run from bundled sample artifacts without requiring models or APIs.")
     args = ap.parse_args()
 
     repo_root = pathlib.Path(__file__).resolve().parents[1]
     config_path = repo_root / args.config
     image_path = repo_root / args.image
     config = read_json(config_path)
-    run_id = args.run_id or f"spatialflow-{int(time.time())}"
+    default_prefix = "spatialflow-smoke" if args.smoke_test else "spatialflow"
+    run_id = args.run_id or f"{default_prefix}-{int(time.time())}"
     run_root = repo_root / "outputs" / run_id
+    if run_root.exists():
+        shutil.rmtree(run_root)
+
+    if args.smoke_test:
+        result = build_smoke_run(repo_root, run_root, run_id, config, image_path)
+        print(json.dumps(result, ensure_ascii=False))
+        return 0
+
     base_dir = run_root / "base"
     review_dir = run_root / "review"
     hitl_dir = run_root / "hitl-v2"

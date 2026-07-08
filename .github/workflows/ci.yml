@@ -32,3 +32,6 @@ jobs:
 
       - name: Python syntax check
         run: python -m py_compile scripts/run_full_pipeline.py tools/*.py
+
+      - name: Smoke test full pipeline
+        run: python scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-ci

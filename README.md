@@ -135,6 +135,20 @@ outputs/spatialflow-<timestamp>/
 python3 scripts/run_full_pipeline.py --feedback "更空、更高级、减少植物、保留墙色和窗户，不要挡窗，地板颜色也尽量不要变"
 ```
 
+### 6. Run the no-GPU smoke test
+
+```bash
+npm run smoke
+```
+
+This path does not call heavy models. It materializes a complete run from bundled sample artifacts and still writes:
+
+- `trace.json`
+- `bundle.json`
+- `demo.html`
+
+That makes the full project reproducible in CI and explorable on machines without a configured vision stack.
+
 ## Web UI
 
 The web UI is part of the complete project, but it is no longer the only public artifact.
@@ -209,7 +223,17 @@ Python syntax sanity check:
 python3 -m py_compile scripts/run_full_pipeline.py tools/*.py
 ```
 
-GitHub Actions also runs the web build on every push and pull request.
+Full smoke test:
+
+```bash
+python3 scripts/run_full_pipeline.py --smoke-test --run-id spatialflow-smoke-check
+```
+
+GitHub Actions now runs:
+
+- web build
+- Python syntax check
+- full smoke test materialization
 
 ## Notes
 
