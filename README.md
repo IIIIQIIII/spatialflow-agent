@@ -24,6 +24,10 @@ This project is a second-stage productization effort built on top of an open-sou
 
 In short: this is not only a frontend replay. It is the full Codex-derived SpatialFlow agent project.
 
+Architecture details:
+
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
 ## What is in this repo
 
 - `tools/`: core Python modules for perception, geometry, planning, editing, verification, and HITL review
@@ -33,6 +37,20 @@ In short: this is not only a frontend replay. It is the full Codex-derived Spati
 - `src/`, `server/`: chat-style product UI and artifact server
 - `demo-data/`: bundled sample run used by the web UI by default
 - `inputs/`: sample room image plus open dataset provenance metadata
+
+## Repository map
+
+```text
+spatialflow-agent/
+  codex-plugin/            Codex-derived plugin and skill packaging
+  configs/                 Agent contract and tool registry
+  tools/                   Python execution pipeline
+  scripts/                 End-to-end runner and demo tooling
+  src/ + server/           Web product layer
+  inputs/                  Open sample inputs
+  demo-data/               Bundled deterministic sample run
+  docs/                    Architecture and media
+```
 
 ## Core pipeline
 
@@ -51,6 +69,16 @@ The runner script stitches these together and writes:
 - `bundle.json`
 - `demo.html`
 - per-tool stdout/stderr logs
+
+## From Codex To SpatialFlow
+
+The main adaptation points are:
+
+- replace code-centric tool use with room-editing tool use
+- keep long-horizon task orchestration and explicit artifacts
+- add spatial state, geometry, and verifier-driven constraints
+- add human-in-the-loop review and revision as part of the default loop
+- keep a product UI that makes the agent trace inspectable
 
 ## Quick start
 
